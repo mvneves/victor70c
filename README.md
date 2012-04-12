@@ -5,20 +5,21 @@ Victor 70C is a Digital Multimeter (DMM) made by Shenzhen Victor Hi-Tech
 Co., Ltd. It is also distributed as OEM by different companies. For example, 
 in Brazil, it is sold as EZA EZ-735 (see the following picture).  
 
-![EZA EZ-735](mvneves/victor70c/raw/master/photo.jpg)
+![EZA EZ-735](raw/master/photo.jpg)
 
 Unfortunately, there is no open source software available to access this DMM in Linux.
 
+This program decodes the USB packets and displays the output as shown in the DMM's LCD.
 
 
 # Installing 
 
 
-This software uses HIDAPI to access the USB interface on Linux. Since HIDAPI 
-is a multi-platform library, this software may also work with Windows and OS X 
+This program uses HIDAPI to access the USB interface on Linux. Since HIDAPI 
+is a multi-platform library, this program may also work with Windows and OS X 
 (Although it has not been tested yet).
 
-So, the first step is download and build HIDAPI:
+So, the first step is to download and build HIDAPI:
 
 	git clone git://github.com/signal11/hidapi.git
 	cd hidapi/linux
