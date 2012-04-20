@@ -1,0 +1,2 @@
+# Setup permissions to the USB device
+KERNEL=="hidraw*", ATTRS{busnum}=="1", ATTRS{idVendor}=="1244", ATTRS{idProduct}=="d237", MODE="0666"

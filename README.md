@@ -8,8 +8,8 @@ in Brazil, it is sold as EZA EZ-735 (see the following picture).
 ![EZA EZ-735](http://github.com/mvneves/victor70c/raw/master/photo.jpg)
 
 Unfortunately, there is no open source software available to access this DMM in Linux.
-
-This program decodes the USB packets and displays the output as shown in the DMM's LCD.
+Thus, this program is the first step in order to have an open source tool to 
+decode the USB packets and displays the output as shown in the DMM's LCD.
 
 
 # Installing 
@@ -19,7 +19,7 @@ This program uses HIDAPI to access the USB interface on Linux. Since HIDAPI
 is a multi-platform library, this program may also work with Windows and OS X 
 (Although it has not been tested yet).
 
-So, the first step is to download and build HIDAPI:
+First of all, download and build HIDAPI:
 
 	git clone git://github.com/signal11/hidapi.git
 	cd hidapi/linux
@@ -34,24 +34,31 @@ Download, build and install the victor70C app:
 	make install
 
 
+# Setting up permissions for USB ports
+
+By default, only root has full access to the usb devices. To change that, 
+copy the udev rules files to /etc/udev/rules.d/ and restart the udev service:
+
+	cp 45-victorusbhidrule.rules /etc/udev/rules.d/
+	/etc/init.d/udev restart
+
+
+
 # Usage examples
 
 
 Example of how to read AC Amps for 5 seconds:
 
 	$ victor70c 5
-	1334180272.776843 0.001 A AC
-	1334180272.880754 0.001 A AC
-	1334180273.472806 0.001 A AC
-	1334180274.048828 0.001 A AC
-	1334180274.592822 0.001 A AC
-	1334180275.200768 0.002 A AC
-	1334180275.776835 0.001 A AC
-	1334180276.320831 0.001 A AC
-	1334180276.896835 0.001 A AC
-	1334180277.440811 0.001 A AC
-	1334180278.080847 0.001 A AC
-
+	1334452992.788321 0.986 A AC
+	1334452993.372336 0.988 A AC
+	1334452994.508409 1.155 A AC
+	1334452995.044356 1.155 A AC
+	1334452995.636368 1.216 A AC
+	1334452996.156378 1.237 A AC
+	1334452996.700382 1.221 A AC
+	1334452997.308444 1.243 A AC
+	1334452997.900399 1.219 A AC
 
 
 
