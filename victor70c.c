@@ -208,7 +208,8 @@ void victor70c_decode(unsigned char *buf, char *str)
 	m = (buf[12] & 0x02) >> 1;
 	V = (buf[4] & 0x80) >> 7;
 	A = buf[8] & 0x01;
-	
+
+#if 0
 	sprintf(str, "%s%d%s%d%s%d%s%d %s%s%s %s", 
 		minus ? "-" : "", 
 		digit[3], 
@@ -222,7 +223,18 @@ void victor70c_decode(unsigned char *buf, char *str)
 		V ? "V" : "",
 		A ? "A" : "",
 		dc ? "DC" : "AC");
-		
+#else
+	sprintf(str, "%s%d%s%d%s%d%s%d", 
+		minus ? "-" : "", 
+		digit[3], 
+		decimal == 2 ? "." : "", 
+		digit[2],
+		decimal == 1 ? "." : "",
+		digit[1],
+		decimal == 0 ? "." : "",
+		digit[0]);
+#endif
+	
 	return;
 }
 
