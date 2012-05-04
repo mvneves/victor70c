@@ -4,6 +4,7 @@
 #include <sys/time.h>
 #include <time.h>
 #include <hidapi.h>
+#include <getopt.h>
 
 #define VICTOR70C_VENDOR_ID		0x1244
 #define VICTOR70C_PRODUCT_ID	0xd237
@@ -53,6 +54,9 @@
 #define VICTOR70C_DIGIT3_8	0x00
 #define VICTOR70C_DIGIT3_9	0x00
 */
+
+/* Flag set by ‘--verbose’. */
+static int verbose_flag = 0;
 
 void victor70c_decode(unsigned char *buf, char *str)
 {
@@ -242,11 +246,35 @@ double get_seconds()
 {
 	struct timeval tv;
 	double time;
-	
+
 	gettimeofday(&tv, NULL);
 	time = (double)tv.tv_sec + (double)tv.tv_usec / 1000 / 1000;
 
 	return time;
+}
+
+int check_elapsed_time(int now, int interval)
+{
+	static int last = 0;
+
+	if (interval == 0)
+		return 1;
+
+	if ((now-last) >= interval) {
+		last = now;
+		return 1;
+	}
+
+	return 0;
+}
+
+void print_help()
+{
+	printf("Usage: victor70c [options] duration\n");
+	printf("Options:\n");
+	printf("   -i --interval          interval in seconds between each read\n");
+	printf("   -v --verbose           turn on verbose output\n");
+	printf("   -h --help              print this help message\n");
 }
 
 int main(int argc, char *argv[])
@@ -257,36 +285,72 @@ int main(int argc, char *argv[])
 	hid_device *handle;
 	double now;
 	double start;
-	double duration;
-	
-	if (argc != 2) {
-		printf("Usage: %s duration\n", argv[0]);
-		return 1;
+	double duration = 0;
+	double interval = 0;
+	int c;
+	int option_index = 0;
+
+	while (1) {
+		static struct option long_options[] = {
+			{"help", no_argument, 0, 'h'},
+			{"verbose", no_argument, 0, 'v'},
+			{"interval", required_argument, 0, 'i'},
+			{0, 0, 0, 0}
+		};
+
+		c = getopt_long(argc, argv, "hvi:", long_options,
+				&option_index);
+
+		if (c == -1)
+			break;
+
+		switch (c) {
+		case 'i':
+			interval = (double)atoi(optarg);
+			break;
+
+		case 'v':
+			verbose_flag = 1;
+			break;
+
+		case '?':
+		case 'h':
+		default:
+			print_help();
+		}
 	}
-	
-	duration = (double)atol(argv[1]);
-	
+
+	if (optind >= argc) {
+		print_help();
+		exit(1);
+	}
+
+	duration = (double)atol(argv[optind]);
+
 	start = get_seconds();
-	
+
 	handle = hid_open(VICTOR70C_VENDOR_ID, VICTOR70C_PRODUCT_ID, NULL);
 	if (!handle) {
 		printf("Cannot found victor70C.\n");
-		return 1;
+		exit(1);
 	}
-	
+
 	do {		
 		ret = hid_read(handle, buf, sizeof(buf));
 		if (ret <= 0 || buf[0] == 0)
 			continue;
 
 		now = get_seconds();
+		if (check_elapsed_time((int)now, interval) == 0)
+			continue;
+
 		victor70c_decode(buf, str);
 		printf("%lf %s\n", now, str);
 		fflush(stdout);
 	} while ((now - start) < duration);
-	
+
 	hid_close(handle);
 	hid_exit();
-	
+
 	return 0;
 }

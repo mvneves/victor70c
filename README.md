@@ -46,6 +46,12 @@ copy the udev rules files to /etc/udev/rules.d/ and restart the udev service:
 
 # Usage examples
 
+	Usage: victor70c [options] duration
+	Options:
+	-i --interval          interval in seconds between each read
+	-v --verbose           turn on verbose output
+	-h --help              print this help message
+
 
 Example of how to read AC Amps for 5 seconds:
 
