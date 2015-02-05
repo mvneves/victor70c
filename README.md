@@ -5,7 +5,7 @@ Victor 70C is a Digital Multimeter (DMM) made by Shenzhen Victor Hi-Tech
 Co., Ltd. It is also distributed as OEM by different companies. For example, 
 in Brazil, it is sold as EZA EZ-735 (see the following picture).  
 
-![EZA EZ-735](http://github.com/mvneves/victor70c/raw/master/photo.jpg)
+![EZA EZ-735](https://github.com/mvneves/victor70c/raw/master/photo.jpg)
 
 Unfortunately, there is no open source software available to access this DMM in Linux.
 Thus, this program is the first step in order to have an open source tool to 
