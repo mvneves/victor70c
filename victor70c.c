@@ -6,48 +6,48 @@
 #include <hidapi.h>
 #include <getopt.h>
 
-#define VICTOR70C_VENDOR_ID		0x1244
-#define VICTOR70C_PRODUCT_ID	0xd237
+#define VICTOR70C_VENDOR_ID 0x1244
+#define VICTOR70C_PRODUCT_ID 0xd237
 
-#define VICTOR70C_DIGIT0_0	0x81
-#define VICTOR70C_DIGIT0_1  0x01
-#define VICTOR70C_DIGIT0_2	0xC1
-#define VICTOR70C_DIGIT0_3	0x41
-#define VICTOR70C_DIGIT0_4	0xA1
-#define VICTOR70C_DIGIT0_5	0x21
-#define VICTOR70C_DIGIT0_6	0xE1
-#define VICTOR70C_DIGIT0_7	0x61
-#define VICTOR70C_DIGIT0_8	0x91
-#define VICTOR70C_DIGIT0_9	0x11
+#define VICTOR70C_DIGIT0_0 0x81
+#define VICTOR70C_DIGIT0_1 0x01
+#define VICTOR70C_DIGIT0_2 0xC1
+#define VICTOR70C_DIGIT0_3 0x41
+#define VICTOR70C_DIGIT0_4 0xA1
+#define VICTOR70C_DIGIT0_5 0x21
+#define VICTOR70C_DIGIT0_6 0xE1
+#define VICTOR70C_DIGIT0_7 0x61
+#define VICTOR70C_DIGIT0_8 0x91
+#define VICTOR70C_DIGIT0_9 0x11
 
-#define VICTOR70C_DIGIT1_0	0x6F
-#define VICTOR70C_DIGIT1_1	0xEF
-#define VICTOR70C_DIGIT1_2	0xAF
-#define VICTOR70C_DIGIT1_3	0x2F
-#define VICTOR70C_DIGIT1_4	0x8F
-#define VICTOR70C_DIGIT1_5	0x0F
-#define VICTOR70C_DIGIT1_6	0xCF
-#define VICTOR70C_DIGIT1_7	0x4F
-#define VICTOR70C_DIGIT1_8	0x7F
-#define VICTOR70C_DIGIT1_9	0xFF
+#define VICTOR70C_DIGIT1_0 0x6F
+#define VICTOR70C_DIGIT1_1 0xEF
+#define VICTOR70C_DIGIT1_2 0xAF
+#define VICTOR70C_DIGIT1_3 0x2F
+#define VICTOR70C_DIGIT1_4 0x8F
+#define VICTOR70C_DIGIT1_5 0x0F
+#define VICTOR70C_DIGIT1_6 0xCF
+#define VICTOR70C_DIGIT1_7 0x4F
+#define VICTOR70C_DIGIT1_8 0x7F
+#define VICTOR70C_DIGIT1_9 0xFF
 
-#define VICTOR70C_DIGIT2_0	0x71
-#define VICTOR70C_DIGIT2_1	0xF1
-#define VICTOR70C_DIGIT2_2	0xB1
-#define VICTOR70C_DIGIT2_3	0x31
-#define VICTOR70C_DIGIT2_4	0x91
-#define VICTOR70C_DIGIT2_5	0x11
-#define VICTOR70C_DIGIT2_6	0xD1
-#define VICTOR70C_DIGIT2_7	0x51
-#define VICTOR70C_DIGIT2_8	0x81
-#define VICTOR70C_DIGIT2_9	0x01
+#define VICTOR70C_DIGIT2_0 0x71
+#define VICTOR70C_DIGIT2_1 0xF1
+#define VICTOR70C_DIGIT2_2 0xB1
+#define VICTOR70C_DIGIT2_3 0x31
+#define VICTOR70C_DIGIT2_4 0x91
+#define VICTOR70C_DIGIT2_5 0x11
+#define VICTOR70C_DIGIT2_6 0xD1
+#define VICTOR70C_DIGIT2_7 0x51
+#define VICTOR70C_DIGIT2_8 0x81
+#define VICTOR70C_DIGIT2_9 0x01
 
-#define VICTOR70C_DIGIT3_0	0x77
-#define VICTOR70C_DIGIT3_1	0xF7
-#define VICTOR70C_DIGIT3_2	0xB7
+#define VICTOR70C_DIGIT3_0 0x77
+#define VICTOR70C_DIGIT3_1 0xF7
+#define VICTOR70C_DIGIT3_2 0xB7
+#define VICTOR70C_DIGIT3_3 0x37
+#define VICTOR70C_DIGIT3_4 0x97
 /*
-#define VICTOR70C_DIGIT3_3	0x00
-#define VICTOR70C_DIGIT3_4	0x00
 #define VICTOR70C_DIGIT3_5	0x00
 #define VICTOR70C_DIGIT3_6	0x00
 #define VICTOR70C_DIGIT3_7	0x00
@@ -61,9 +61,10 @@ static int verbose_flag = 0;
 void victor70c_decode(unsigned char *buf, char *str)
 {
 	int m, V, A, minus, acdc, dc, decimal;
-	int digit[4] = { 0, 0, 0, 0 };
-	
-	switch (buf[6]) {
+	int digit[4] = {0, 0, 0, 0};
+
+	switch (buf[6])
+	{
 	case VICTOR70C_DIGIT0_0:
 		digit[0] = 0;
 		break;
@@ -98,7 +99,8 @@ void victor70c_decode(unsigned char *buf, char *str)
 		printf("Invalid digit0 = 0x%x\n", buf[6]);
 	}
 
-	switch (buf[9]) {
+	switch (buf[9])
+	{
 	case VICTOR70C_DIGIT1_0:
 		digit[1] = 0;
 		break;
@@ -133,7 +135,8 @@ void victor70c_decode(unsigned char *buf, char *str)
 		printf("Invalid digit1 = 0x%x\n", buf[9]);
 	}
 
-	switch (buf[3]) {
+	switch (buf[3])
+	{
 	case VICTOR70C_DIGIT2_0:
 		digit[2] = 0;
 		break;
@@ -168,7 +171,8 @@ void victor70c_decode(unsigned char *buf, char *str)
 		printf("Invalid digit2 = 0x%x\n", buf[3]);
 	}
 
-	switch (buf[10]) {
+	switch (buf[10])
+	{
 	case VICTOR70C_DIGIT3_0:
 		digit[3] = 0;
 		break;
@@ -178,9 +182,13 @@ void victor70c_decode(unsigned char *buf, char *str)
 	case VICTOR70C_DIGIT3_2:
 		digit[3] = 2;
 		break;
-/*
 	case VICTOR70C_DIGIT3_3:
+		digit[3] = 3;
+		break;
 	case VICTOR70C_DIGIT3_4:
+		digit[3] = 4;
+		break;
+	/*
 	case VICTOR70C_DIGIT3_5:
 	case VICTOR70C_DIGIT3_6:
 	case VICTOR70C_DIGIT3_7:
@@ -193,21 +201,29 @@ void victor70c_decode(unsigned char *buf, char *str)
 	}
 
 	acdc = (buf[1] & 0x60) >> 5;
-	if (acdc == 0x02) {
+	if (acdc == 0x02)
+	{
 		dc = 0;
-	} else if (acdc == 0x01) {
+	}
+	else if (acdc == 0x01)
+	{
 		dc = 1;
 	}
 
 	decimal = (buf[5] & 0xE0) >> 5;
-	if (decimal == 0x00) {
+	if (decimal == 0x00)
+	{
 		decimal = 2;
-	} else if (decimal == 0x06) {
+	}
+	else if (decimal == 0x06)
+	{
 		decimal = 1;
-	} else if (decimal == 0x05) {
+	}
+	else if (decimal == 0x05)
+	{
 		decimal = 0;
 	}
-	
+
 	minus = buf[4] & 0x01;
 	m = (buf[12] & 0x02) >> 1;
 	V = (buf[4] & 0x80) >> 7;
@@ -228,17 +244,17 @@ void victor70c_decode(unsigned char *buf, char *str)
 		A ? "A" : "",
 		dc ? "DC" : "AC");
 #else
-	sprintf(str, "%s%d%s%d%s%d%s%d", 
-		minus ? "-" : "", 
-		digit[3], 
-		decimal == 2 ? "." : "", 
-		digit[2],
-		decimal == 1 ? "." : "",
-		digit[1],
-		decimal == 0 ? "." : "",
-		digit[0]);
+	sprintf(str, "%s%d%s%d%s%d%s%d",
+			minus ? "-" : "",
+			digit[3],
+			decimal == 2 ? "." : "",
+			digit[2],
+			decimal == 1 ? "." : "",
+			digit[1],
+			decimal == 0 ? "." : "",
+			digit[0]);
 #endif
-	
+
 	return;
 }
 
@@ -260,7 +276,8 @@ int check_elapsed_time(int now, int interval)
 	if (interval == 0)
 		return 1;
 
-	if ((now-last) >= interval) {
+	if ((now - last) >= interval)
+	{
 		last = now;
 		return 1;
 	}
@@ -290,21 +307,22 @@ int main(int argc, char *argv[])
 	int c;
 	int option_index = 0;
 
-	while (1) {
+	while (1)
+	{
 		static struct option long_options[] = {
 			{"help", no_argument, 0, 'h'},
 			{"verbose", no_argument, 0, 'v'},
 			{"interval", required_argument, 0, 'i'},
-			{0, 0, 0, 0}
-		};
+			{0, 0, 0, 0}};
 
 		c = getopt_long(argc, argv, "hvi:", long_options,
-				&option_index);
+						&option_index);
 
 		if (c == -1)
 			break;
 
-		switch (c) {
+		switch (c)
+		{
 		case 'i':
 			interval = (double)atoi(optarg);
 			break;
@@ -320,7 +338,8 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	if (optind >= argc) {
+	if (optind >= argc)
+	{
 		print_help();
 		exit(1);
 	}
@@ -330,12 +349,14 @@ int main(int argc, char *argv[])
 	start = get_seconds();
 
 	handle = hid_open(VICTOR70C_VENDOR_ID, VICTOR70C_PRODUCT_ID, NULL);
-	if (!handle) {
+	if (!handle)
+	{
 		printf("Cannot found victor70C.\n");
 		exit(1);
 	}
 
-	do {		
+	do
+	{
 		ret = hid_read(handle, buf, sizeof(buf));
 		if (ret <= 0 || buf[0] == 0)
 			continue;
